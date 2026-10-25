@@ -65,20 +65,8 @@
             align-items: center;
         }
 
-        .season-chip {
-            font-size: 0.78rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--accent);
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 5px 14px;
-            border-radius: 50px;
-            height: 28px;
-        }
-
         h1 {
-            margin-top: 18px;
+            margin-top: 0;
             font-size: 1rem;
             font-weight: 600;
             letter-spacing: 2px;
@@ -195,7 +183,6 @@
 <canvas id="scene"></canvas>
 
 <div class="container">
-    <div id="season-chip" class="season-chip"></div>
     <h1>До дембеля осталось</h1>
     <div id="home-badge" class="badge-home">Еще дома</div>
 
@@ -298,12 +285,7 @@
     }
 
     // ================== СЕЗОНЫ ==================
-    const SEASON_INFO = {
-        winter: '❄ Зима',
-        spring: '🌸 Весна',
-        summer: '☀ Лето',
-        autumn: '🍂 Осень'
-    };
+    const SEASONS = ['winter', 'spring', 'summer', 'autumn'];
 
     function getSeason(d) {
         const m = d.getMonth();                 // 0 = январь
@@ -315,10 +297,9 @@
 
     // ?season=winter|spring|summer|autumn — для проверки
     const forced = new URLSearchParams(location.search).get('season');
-    const season = SEASON_INFO[forced] ? forced : getSeason(new Date());
+    const season = SEASONS.includes(forced) ? forced : getSeason(new Date());
 
     document.body.classList.add(season);
-    document.getElementById('season-chip').textContent = SEASON_INFO[season];
 
     // ================== АНИМАЦИЯ ==================
     const canvas = document.getElementById('scene');
