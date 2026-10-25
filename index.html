@@ -12,112 +12,199 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
+        :root {
+            --bg1: #0b1730;
+            --bg2: #1e3a5f;
+            --accent: #7dd3fc;
+        }
+
+        body.winter { --bg1: #0b1730; --bg2: #25507a; --accent: #7dd3fc; }
+        body.spring { --bg1: #1c3b33; --bg2: #4f8a68; --accent: #f9a8d4; }
+        body.summer { --bg1: #0284c7; --bg2: #fbbf24; --accent: #fde047; }
+        body.autumn { --bg1: #2e1508; --bg2: #b45309; --accent: #fdba74; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
         body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            background: linear-gradient(160deg, var(--bg1), var(--bg2));
             color: #f8fafc;
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px;
+            padding: 16px;
+        }
+
+        #scene {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         .container {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 40px 24px;
-            border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            max-width: 450px;
-            width: 100%;
+            position: relative;
+            z-index: 1;
+            width: min(440px, 100%);
+            height: 520px;
+            max-height: 100%;
+            padding: 32px 24px 24px;
+            border-radius: 28px;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .season-chip {
+            font-size: 0.78rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 5px 14px;
+            border-radius: 50px;
+            height: 28px;
         }
 
         h1 {
-            font-size: 1.1rem;
+            margin-top: 18px;
+            font-size: 1rem;
             font-weight: 600;
-            letter-spacing: 1.5px;
-            margin-bottom: 25px;
-            color: #94a3b8;
+            letter-spacing: 2px;
+            color: #cbd5e1;
             text-transform: uppercase;
         }
 
         .badge-home {
-            display: inline-block;
-            background: rgba(234, 179, 8, 0.15);
-            color: #fde047;
-            border: 1px solid rgba(234, 179, 8, 0.3);
-            padding: 6px 16px;
+            margin-top: 14px;
+            height: 32px;
+            line-height: 30px;
+            padding: 0 16px;
             border-radius: 50px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
+            color: #fde047;
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid rgba(234, 179, 8, 0.35);
+            visibility: hidden;
         }
 
-        .status {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #38bdf8;
-            text-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
-            min-height: 70px;
+        .badge-home.show { visibility: visible; }
+
+        /* Зона счетчика фиксированной высоты */
+        .counter-wrap {
+            flex: 1;
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            word-break: break-word;
-            line-height: 1.3;
         }
 
-        .subtext {
-            font-size: 0.9rem;
-            color: #64748b;
-            margin-top: 25px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 15px;
+        .counter {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
         }
+
+        .unit {
+            width: 70px;
+            padding: 14px 0 10px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .unit .num {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-variant-numeric: tabular-nums;
+            line-height: 1.1;
+        }
+
+        .unit .lbl {
+            margin-top: 6px;
+            font-size: 0.66rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .unit.big { width: 220px; padding: 22px 0 16px; }
+        .unit.big .num { font-size: 3.6rem; }
+        .unit.big .lbl { font-size: 0.8rem; }
+
+        .unit.done { width: 260px; padding: 28px 0; }
+        .unit.done .num { font-size: 2.4rem; color: #4ade80; }
 
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 25px;
+            width: 100%;
         }
 
         button {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #94a3b8;
-            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            height: 40px;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 500;
             transition: all 0.2s ease;
         }
 
         button:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.14);
+            color: #fff;
         }
 
         button.active {
-            background: #0284c7;
-            color: #ffffff;
-            border-color: #38bdf8;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+            background: var(--accent);
+            color: #0f172a;
+            border-color: transparent;
+            font-weight: 600;
+        }
+
+        .subtext {
+            margin-top: 18px;
+            width: 100%;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 14px;
         }
     </style>
 </head>
 <body>
 
+<canvas id="scene"></canvas>
+
 <div class="container">
-    <div id="home-badge" class="badge-home" style="display: none;">Еще дома</div>
+    <div id="season-chip" class="season-chip"></div>
     <h1>До дембеля осталось</h1>
-    <div id="counter" class="status">Загрузка...</div>
+    <div id="home-badge" class="badge-home">Еще дома</div>
+
+    <div class="counter-wrap">
+        <div id="counter" class="counter"></div>
+    </div>
 
     <div class="controls">
-        <button onclick="setFormat('full')" id="btn-full" class="active">Г : М : Д : Мн : Ск</button>
+        <button onclick="setFormat('full')" id="btn-full" class="active">Г : М : Д : Мин : Сек</button>
         <button onclick="setFormat('ymd')" id="btn-ymd">Месяцы + Дни</button>
         <button onclick="setFormat('days')" id="btn-days">Только Дни</button>
         <button onclick="setFormat('short')" id="btn-short">М : Д : Мин</button>
@@ -127,17 +214,14 @@
 </div>
 
 <script>
-    // Целевые даты
+    // ================== СЧЕТЧИК ==================
     const targetDate = new Date(2027, 9, 28, 0, 0, 0);
     const checkDate = new Date(2026, 9, 28, 0, 0, 0);
-
-    // Текущий выбранный формат (по умолчанию полный)
     let currentFormat = 'full';
 
     function setFormat(format) {
         currentFormat = format;
-        // Переключаем активный класс на кнопках
-        document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
         document.getElementById(`btn-${format}`).classList.add('active');
         updateCounter();
     }
@@ -152,34 +236,30 @@
         return five;
     }
 
+    function render(units, cls = '') {
+        document.getElementById('counter').innerHTML = units.map(u =>
+            `<div class="unit ${cls}"><div class="num">${u.value}</div><div class="lbl">${u.label}</div></div>`
+        ).join('');
+    }
+
     function updateCounter() {
         const now = new Date();
-        const counterElement = document.getElementById('counter');
-        const homeBadge = document.getElementById('home-badge');
-
-        // Показываем плашку "Еще дома", если дата меньше 28.10.2026
-        if (now < checkDate) {
-            homeBadge.style.display = 'inline-block';
-        } else {
-            homeBadge.style.display = 'none';
-        }
+        document.getElementById('home-badge').classList.toggle('show', now < checkDate);
 
         if (now >= targetDate) {
-            counterElement.textContent = "Дембель!";
-            counterElement.style.color = "#4ade80";
+            document.getElementById('counter').innerHTML =
+                `<div class="unit done"><div class="num">Дембель!</div></div>`;
             return;
         }
 
         const totalMs = targetDate - now;
 
-        // 1. Формат: Только Дни
         if (currentFormat === 'days') {
-            const days = Math.floor(totalMs / (1000 * 60 * 60 * 24));
-            counterElement.textContent = `${days} ${getPlural(days, 'день', 'дня', 'дней')}`;
+            const d = Math.floor(totalMs / 86400000);
+            render([{ value: d, label: getPlural(d, 'день', 'дня', 'дней') }], 'big');
             return;
         }
 
-        // Вычисления для развернутых форматов через встроенный календарь (учитывает високосные года и разную длину месяцев)
         let years = targetDate.getFullYear() - now.getFullYear();
         let months = targetDate.getMonth() - now.getMonth();
         let days = targetDate.getDate() - now.getDate();
@@ -192,47 +272,239 @@
         if (hours < 0) { days--; hours += 24; }
         if (days < 0) {
             months--;
-            // Берем количество дней в предыдущем месяце целевой даты
             const prevMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
             days += prevMonth.getDate();
         }
         if (months < 0) { years--; months += 12; }
 
-        // 2. Формат: Год : Месяц : День : Минута : Секунда (Полный)
+        const totalMonths = years * 12 + months;
+        const u = [];
+
         if (currentFormat === 'full') {
-            let res = [];
-            if (years > 0) res.push(`${years} ${getPlural(years, 'г', 'г', 'лет')}`);
-            if (months > 0 || years > 0) res.push(`${months} ${getPlural(months, 'мес', 'мес', 'мес')}`);
-            res.push(`${days} ${getPlural(days, 'дн', 'дн', 'дн')}`);
-            res.push(`${minutes} ${getPlural(minutes, 'мин', 'мин', 'мин')}`);
-            res.push(`${seconds} ${getPlural(seconds, 'сек', 'сек', 'сек')}`);
-            counterElement.textContent = res.join(' : ');
-            return;
+            if (years > 0) u.push({ value: years, label: getPlural(years, 'год', 'года', 'лет') });
+            if (months > 0 || years > 0) u.push({ value: months, label: getPlural(months, 'месяц', 'месяца', 'месяцев') });
+            u.push({ value: days, label: getPlural(days, 'день', 'дня', 'дней') });
+            u.push({ value: minutes, label: getPlural(minutes, 'минута', 'минуты', 'минут') });
+            u.push({ value: seconds, label: getPlural(seconds, 'секунда', 'секунды', 'секунд') });
+        } else if (currentFormat === 'ymd') {
+            if (totalMonths > 0) u.push({ value: totalMonths, label: getPlural(totalMonths, 'месяц', 'месяца', 'месяцев') });
+            u.push({ value: days, label: getPlural(days, 'день', 'дня', 'дней') });
+        } else if (currentFormat === 'short') {
+            if (totalMonths > 0) u.push({ value: totalMonths, label: getPlural(totalMonths, 'месяц', 'месяца', 'месяцев') });
+            u.push({ value: days, label: getPlural(days, 'день', 'дня', 'дней') });
+            u.push({ value: minutes, label: getPlural(minutes, 'минута', 'минуты', 'минут') });
         }
-
-        // 3. Формат: Месяцы + Дни
-        if (currentFormat === 'ymd') {
-            let totalMonths = (years * 12) + months;
-            let res = [];
-            if (totalMonths > 0) res.push(`${totalMonths} ${getPlural(totalMonths, 'месяц', 'месяца', 'месяцев')}`);
-            res.push(`${days} ${getPlural(days, 'день', 'дня', 'дней')}`);
-            counterElement.textContent = res.join(' и ');
-            return;
-        }
-
-        // 4. Формат: Месяц : День : Минута (отрезая наименьшее / без секунд и часов)
-        if (currentFormat === 'short') {
-            let totalMonths = (years * 12) + months;
-            let res = [];
-            if (totalMonths > 0) res.push(`${totalMonths} мес`);
-            res.push(`${days} дн`);
-            res.push(`${minutes} мин`);
-            counterElement.textContent = res.join(' : ');
-            return;
-        }
+        render(u);
     }
 
-    // Обновление каждую секунду для плавного тикания
+    // ================== СЕЗОНЫ ==================
+    const SEASON_INFO = {
+        winter: '❄ Зима',
+        spring: '🌸 Весна',
+        summer: '☀ Лето',
+        autumn: '🍂 Осень'
+    };
+
+    function getSeason(d) {
+        const m = d.getMonth();                 // 0 = январь
+        if (m === 11 || m <= 1) return 'winter'; // 1 дек – конец февраля
+        if (m <= 4) return 'spring';
+        if (m <= 7) return 'summer';
+        return 'autumn';
+    }
+
+    // ?season=winter|spring|summer|autumn — для проверки
+    const forced = new URLSearchParams(location.search).get('season');
+    const season = SEASON_INFO[forced] ? forced : getSeason(new Date());
+
+    document.body.classList.add(season);
+    document.getElementById('season-chip').textContent = SEASON_INFO[season];
+
+    // ================== АНИМАЦИЯ ==================
+    const canvas = document.getElementById('scene');
+    const ctx = canvas.getContext('2d');
+    let W = 0, H = 0, particles = [];
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    const LEAF_COLORS = ['#dc2626', '#ea580c', '#f59e0b', '#eab308', '#b45309', '#9a3412'];
+    const PETAL_COLORS = ['#fbcfe8', '#f9a8d4', '#fce7f3', '#f472b6'];
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        initParticles();
+    }
+
+    function createParticle(initial) {
+        const p = {
+            x: rand(0, W),
+            y: initial ? rand(0, H) : rand(-30, -5),
+            phase: rand(0, Math.PI * 2)
+        };
+        switch (season) {
+            case 'winter':
+                p.r = rand(1.5, 4.5);
+                p.vy = rand(0.5, 1.4) + p.r * 0.15;
+                p.sway = rand(0.3, 1);
+                p.alpha = rand(0.5, 0.95);
+                break;
+            case 'autumn':
+                p.s = rand(7, 14);
+                p.vy = rand(0.7, 1.6);
+                p.sway = rand(0.8, 1.8);
+                p.rot = rand(0, Math.PI * 2);
+                p.vr = rand(-0.03, 0.03);
+                p.color = pick(LEAF_COLORS);
+                break;
+            case 'spring':
+                p.s = rand(4, 8);
+                p.vy = rand(0.5, 1.2);
+                p.sway = rand(0.6, 1.4);
+                p.drift = rand(0.2, 0.8);
+                p.rot = rand(0, Math.PI * 2);
+                p.vr = rand(-0.04, 0.04);
+                p.color = pick(PETAL_COLORS);
+                break;
+            case 'summer':
+                p.y = initial ? rand(0, H) : H + 10;
+                p.r = rand(1, 2.6);
+                p.vy = -rand(0.15, 0.5);
+                p.sway = rand(0.2, 0.6);
+                p.alpha = rand(0.3, 0.8);
+                break;
+        }
+        return p;
+    }
+
+    function initParticles() {
+        const area = W * H;
+        const counts = { winter: 9000, autumn: 22000, spring: 18000, summer: 20000 };
+        const n = Math.min(160, Math.round(area / counts[season]));
+        particles = Array.from({ length: n }, () => createParticle(true));
+    }
+
+    function drawSun(t) {
+        const cx = W * 0.82, cy = H * 0.17;
+        const R = Math.max(36, Math.min(64, Math.min(W, H) * 0.08));
+
+        // свечение
+        const glow = ctx.createRadialGradient(cx, cy, R * 0.5, cx, cy, R * 5);
+        glow.addColorStop(0, 'rgba(255, 240, 150, 0.55)');
+        glow.addColorStop(1, 'rgba(255, 240, 150, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R * 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // лучи
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(t * 0.00015);
+        ctx.fillStyle = 'rgba(255, 235, 140, 0.55)';
+        const rays = 16;
+        for (let i = 0; i < rays; i++) {
+            ctx.rotate((Math.PI * 2) / rays);
+            const len = R * (i % 2 ? 1.9 : 2.4);
+            ctx.beginPath();
+            ctx.moveTo(-R * 0.14, R * 1.2);
+            ctx.lineTo(0, R * 1.2 + len * 0.6);
+            ctx.lineTo(R * 0.14, R * 1.2);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
+
+        // диск
+        const disc = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R);
+        disc.addColorStop(0, '#fffbe0');
+        disc.addColorStop(1, '#fcd34d');
+        ctx.fillStyle = disc;
+        ctx.beginPath();
+        ctx.arc(cx, cy, R, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    function drawLeaf(p) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.moveTo(0, -p.s);
+        ctx.quadraticCurveTo(p.s * 0.9, 0, 0, p.s);
+        ctx.quadraticCurveTo(-p.s * 0.9, 0, 0, -p.s);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, -p.s);
+        ctx.lineTo(0, p.s + 3);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function drawPetal(p) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = 0.9;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.s, p.s * 0.55, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function frame(t) {
+        ctx.clearRect(0, 0, W, H);
+
+        if (season === 'summer') drawSun(t);
+
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.phase += 0.015;
+            p.x += Math.sin(p.phase) * p.sway + (p.drift || 0);
+            p.y += p.vy;
+            if (p.vr) p.rot += p.vr;
+
+            if (season === 'winter') {
+                ctx.globalAlpha = p.alpha;
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            } else if (season === 'autumn') {
+                drawLeaf(p);
+            } else if (season === 'spring') {
+                drawPetal(p);
+            } else {
+                ctx.globalAlpha = p.alpha * (0.6 + 0.4 * Math.sin(p.phase * 2));
+                ctx.fillStyle = '#fff6b0';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+
+            const out = season === 'summer' ? p.y < -10 : p.y > H + 20;
+            if (out || p.x > W + 30 || p.x < -30) {
+                particles[i] = createParticle(false);
+            }
+        }
+        requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(frame);
+
     setInterval(updateCounter, 1000);
     updateCounter();
 </script>
