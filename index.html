@@ -16,12 +16,32 @@
             --bg1: #0b1730;
             --bg2: #1e3a5f;
             --accent: #7dd3fc;
+            --gap: 24px;
         }
 
-        body.winter { --bg1: #0b1730; --bg2: #25507a; --accent: #7dd3fc; }
-        body.spring { --bg1: #1c3b33; --bg2: #4f8a68; --accent: #f9a8d4; }
-        body.summer { --bg1: #0284c7; --bg2: #fbbf24; --accent: #fde047; }
-        body.autumn { --bg1: #2e1508; --bg2: #b45309; --accent: #fdba74; }
+        body.winter {
+            --bg1: #0b1730;
+            --bg2: #25507a;
+            --accent: #7dd3fc;
+        }
+
+        body.spring {
+            --bg1: #1c3b33;
+            --bg2: #4f8a68;
+            --accent: #f9a8d4;
+        }
+
+        body.summer {
+            --bg1: #0284c7;
+            --bg2: #fbbf24;
+            --accent: #fde047;
+        }
+
+        body.autumn {
+            --bg1: #2e1508;
+            --bg2: #b45309;
+            --accent: #fdba74;
+        }
 
         html, body {
             height: 100%;
@@ -51,9 +71,9 @@
             position: relative;
             z-index: 1;
             width: min(440px, 100%);
-            height: 520px;
+            height: 300px;
             max-height: 100%;
-            padding: 32px 24px 24px;
+            padding: 28px 24px;
             border-radius: 28px;
             background: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(18px);
@@ -62,11 +82,12 @@
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            gap: var(--gap);
         }
 
         h1 {
-            margin-top: 0;
             font-size: 1rem;
             font-weight: 600;
             letter-spacing: 2px;
@@ -75,28 +96,44 @@
         }
 
         .badge-home {
-            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             height: 32px;
-            line-height: 30px;
             padding: 0 16px;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            color: #fde047;
-            background: rgba(234, 179, 8, 0.15);
-            border: 1px solid rgba(234, 179, 8, 0.35);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             visibility: hidden;
         }
 
-        .badge-home.show { visibility: visible; }
+        .badge-home::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
 
-        /* Зона счетчика фиксированной высоты */
-        .counter-wrap {
-            flex: 1;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.35;
+                transform: scale(0.7);
+            }
+        }
+
+        .badge-home.show {
+            visibility: visible;
         }
 
         .counter {
@@ -107,7 +144,9 @@
         }
 
         .unit {
-            width: 70px;
+            flex: 1 1 0;
+            min-width: 0;
+            max-width: 78px;
             padding: 14px 0 10px;
             border-radius: 16px;
             background: rgba(255, 255, 255, 0.07);
@@ -130,51 +169,22 @@
             color: #94a3b8;
         }
 
-        .unit.big { width: 220px; padding: 22px 0 16px; }
-        .unit.big .num { font-size: 3.6rem; }
-        .unit.big .lbl { font-size: 0.8rem; }
-
-        .unit.done { width: 260px; padding: 28px 0; }
-        .unit.done .num { font-size: 2.4rem; color: #4ade80; }
-
-        .controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            width: 100%;
+        .unit.done {
+            max-width: 260px;
+            padding: 16px 0;
         }
 
-        button {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #cbd5e1;
-            height: 40px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        button:hover {
-            background: rgba(255, 255, 255, 0.14);
-            color: #fff;
-        }
-
-        button.active {
-            background: var(--accent);
-            color: #0f172a;
-            border-color: transparent;
-            font-weight: 600;
+        .unit.done .num {
+            font-size: 2.4rem;
+            color: #4ade80;
         }
 
         .subtext {
-            margin-top: 18px;
             width: 100%;
             font-size: 0.85rem;
             color: #94a3b8;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 14px;
+            padding-top: var(--gap);
         }
     </style>
 </head>
@@ -183,19 +193,10 @@
 <canvas id="scene"></canvas>
 
 <div class="container">
+    <div id="home-badge" class="badge-home">Служба еще не началась</div>
     <h1>До дембеля осталось</h1>
-    <div id="home-badge" class="badge-home">Еще дома</div>
 
-    <div class="counter-wrap">
-        <div id="counter" class="counter"></div>
-    </div>
-
-    <div class="controls">
-        <button onclick="setFormat('full')" id="btn-full" class="active">Г : М : Д : Мин : Сек</button>
-        <button onclick="setFormat('ymd')" id="btn-ymd">Месяцы + Дни</button>
-        <button onclick="setFormat('days')" id="btn-days">Только Дни</button>
-        <button onclick="setFormat('short')" id="btn-short">М : Д : Мин</button>
-    </div>
+    <div id="counter" class="counter"></div>
 
     <div class="subtext">Дата дембеля (предположительная): 28.10.2027</div>
 </div>
@@ -204,14 +205,6 @@
     // ================== СЧЕТЧИК ==================
     const targetDate = new Date(2027, 9, 28, 0, 0, 0);
     const checkDate = new Date(2026, 9, 28, 0, 0, 0);
-    let currentFormat = 'full';
-
-    function setFormat(format) {
-        currentFormat = format;
-        document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
-        document.getElementById(`btn-${format}`).classList.add('active');
-        updateCounter();
-    }
 
     function getPlural(number, one, two, five) {
         let n = Math.abs(number);
@@ -223,9 +216,9 @@
         return five;
     }
 
-    function render(units, cls = '') {
+    function render(units) {
         document.getElementById('counter').innerHTML = units.map(u =>
-            `<div class="unit ${cls}"><div class="num">${u.value}</div><div class="lbl">${u.label}</div></div>`
+            `<div class="unit"><div class="num">${u.value}</div><div class="lbl">${u.label}</div></div>`
         ).join('');
     }
 
@@ -239,14 +232,6 @@
             return;
         }
 
-        const totalMs = targetDate - now;
-
-        if (currentFormat === 'days') {
-            const d = Math.floor(totalMs / 86400000);
-            render([{ value: d, label: getPlural(d, 'день', 'дня', 'дней') }], 'big');
-            return;
-        }
-
         let years = targetDate.getFullYear() - now.getFullYear();
         let months = targetDate.getMonth() - now.getMonth();
         let days = targetDate.getDate() - now.getDate();
@@ -254,44 +239,54 @@
         let minutes = targetDate.getMinutes() - now.getMinutes();
         let seconds = targetDate.getSeconds() - now.getSeconds();
 
-        if (seconds < 0) { minutes--; seconds += 60; }
-        if (minutes < 0) { hours--; minutes += 60; }
-        if (hours < 0) { days--; hours += 24; }
+        if (seconds < 0) {
+            minutes--;
+            seconds += 60;
+        }
+        if (minutes < 0) {
+            hours--;
+            minutes += 60;
+        }
+        if (hours < 0) {
+            days--;
+            hours += 24;
+        }
         if (days < 0) {
             months--;
             const prevMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
             days += prevMonth.getDate();
         }
-        if (months < 0) { years--; months += 12; }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
 
         const totalMonths = years * 12 + months;
-        const u = [];
 
-        if (currentFormat === 'full') {
-            if (years > 0) u.push({ value: years, label: getPlural(years, 'год', 'года', 'лет') });
-            if (months > 0 || years > 0) u.push({ value: months, label: getPlural(months, 'месяц', 'месяца', 'месяцев') });
-            u.push({ value: days, label: getPlural(days, 'день', 'дня', 'дней') });
-            u.push({ value: minutes, label: getPlural(minutes, 'минута', 'минуты', 'минут') });
-            u.push({ value: seconds, label: getPlural(seconds, 'секунда', 'секунды', 'секунд') });
-        } else if (currentFormat === 'ymd') {
-            if (totalMonths > 0) u.push({ value: totalMonths, label: getPlural(totalMonths, 'месяц', 'месяца', 'месяцев') });
-            u.push({ value: days, label: getPlural(days, 'день', 'дня', 'дней') });
-        } else if (currentFormat === 'short') {
-            if (totalMonths > 0) u.push({ value: totalMonths, label: getPlural(totalMonths, 'месяц', 'месяца', 'месяцев') });
-            u.push({ value: days, label: getPlural(days, 'день', 'дня', 'дней') });
-            u.push({ value: minutes, label: getPlural(minutes, 'минута', 'минуты', 'минут') });
-        }
-        render(u);
+        render([
+            {value: totalMonths, label: getPlural(totalMonths, 'месяц', 'месяца', 'месяцев')},
+            {value: days, label: getPlural(days, 'день', 'дня', 'дней')},
+            {value: minutes, label: getPlural(minutes, 'минута', 'минуты', 'минут')},
+            {value: seconds, label: getPlural(seconds, 'секунда', 'секунды', 'секунд')}
+        ]);
     }
 
     // ================== СЕЗОНЫ ==================
     const SEASONS = ['winter', 'spring', 'summer', 'autumn'];
 
     function getSeason(d) {
-        const m = d.getMonth();                 // 0 = январь
-        if (m === 11 || m <= 1) return 'winter'; // 1 дек – конец февраля
-        if (m <= 4) return 'spring';
-        if (m <= 7) return 'summer';
+        const m = d.getMonth();
+
+        if (m === 11 || m <= 1) {
+            return 'winter';
+        }
+        if (m <= 4) {
+            return 'spring';
+        }
+        if (m <= 7) {
+            return 'summer';
+        }
+
         return 'autumn';
     }
 
@@ -365,9 +360,9 @@
 
     function initParticles() {
         const area = W * H;
-        const counts = { winter: 9000, autumn: 22000, spring: 18000, summer: 20000 };
+        const counts = {winter: 9000, autumn: 22000, spring: 18000, summer: 20000};
         const n = Math.min(160, Math.round(area / counts[season]));
-        particles = Array.from({ length: n }, () => createParticle(true));
+        particles = Array.from({length: n}, () => createParticle(true));
     }
 
     function drawSun(t) {
