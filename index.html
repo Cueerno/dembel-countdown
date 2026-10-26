@@ -16,7 +16,7 @@
             --bg1: #0b1730;
             --bg2: #1e3a5f;
             --accent: #7dd3fc;
-            --gap: 24px;
+            --gap: 20px;
         }
 
         body.winter {
@@ -70,10 +70,10 @@
         .container {
             position: relative;
             z-index: 1;
-            width: min(440px, 100%);
-            height: 300px;
+            width: min(860px, 100%);
+            height: 680px;
             max-height: 100%;
-            padding: 28px 24px;
+            padding: 24px 28px;
             border-radius: 28px;
             background: rgba(15, 23, 42, 0.5);
             backdrop-filter: blur(18px);
@@ -82,13 +82,78 @@
             box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            gap: 16px;
+        }
+
+        /* ---------- Вкладки ---------- */
+        .tabs {
+            display: flex;
+            width: 100%;
+            max-width: 300px;
+            padding: 4px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            flex-shrink: 0;
+        }
+
+        .tab {
+            flex: 1;
+            height: 34px;
+            border: none;
+            border-radius: 50px;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab:hover {
+            color: #f8fafc;
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: #0f172a;
+        }
+
+        /* ---------- Области вкладок ---------- */
+        .views {
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .view {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view.active {
+            display: flex;
+        }
+
+        #view-counter {
             gap: var(--gap);
         }
 
+        #view-calendar {
+            gap: 12px;
+            justify-content: flex-start;
+        }
+
+        /* ---------- Счетчик ---------- */
         h1 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             letter-spacing: 2px;
             color: #cbd5e1;
@@ -112,15 +177,6 @@
             visibility: hidden;
         }
 
-        .badge-home::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
         @keyframes pulse {
             0%, 100% {
                 opacity: 1;
@@ -139,22 +195,22 @@
         .counter {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
             width: 100%;
         }
 
         .unit {
             flex: 1 1 0;
             min-width: 0;
-            max-width: 78px;
-            padding: 14px 0 10px;
-            border-radius: 16px;
+            max-width: 130px;
+            padding: 18px 0 14px;
+            border-radius: 18px;
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .unit .num {
-            font-size: 1.9rem;
+            font-size: 2.6rem;
             font-weight: 700;
             color: var(--accent);
             font-variant-numeric: tabular-nums;
@@ -162,20 +218,20 @@
         }
 
         .unit .lbl {
-            margin-top: 6px;
-            font-size: 0.66rem;
+            margin-top: 8px;
+            font-size: 0.72rem;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             color: #94a3b8;
         }
 
         .unit.done {
-            max-width: 260px;
-            padding: 16px 0;
+            max-width: 300px;
+            padding: 24px 0;
         }
 
         .unit.done .num {
-            font-size: 2.4rem;
+            font-size: 2.8rem;
             color: #4ade80;
         }
 
@@ -186,6 +242,171 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: var(--gap);
         }
+
+        /* ---------- Календарь ---------- */
+        .cal-progress {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            flex-shrink: 0;
+        }
+
+        .cal-progress b {
+            color: var(--accent);
+            font-size: 1.05rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .bar {
+            width: 100%;
+            height: 8px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .bar > div {
+            height: 100%;
+            width: 0;
+            border-radius: 8px;
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent);
+            transition: width 0.6s ease;
+        }
+
+        #view-calendar .bar {
+            flex-shrink: 0;
+            height: 6px;
+        }
+
+        .cal-grid {
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .month-row {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            align-items: stretch;
+            gap: 8px;
+        }
+
+        .month-label {
+            flex: 0 0 48px;
+            display: flex;
+            align-items: center;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #94a3b8;
+        }
+
+        .month-days {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(31, 1fr);
+            grid-template-rows: 1fr;
+            gap: 3px;
+        }
+
+        .day {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.09);
+            color: #e2e8f0;
+            font-size: 0.7rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .day.passed {
+            background: rgba(255, 255, 255, 0.03);
+            color: #64748b;
+        }
+
+        .day.passed::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.85;
+            background:
+                    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--accent) calc(50% - 0.75px), var(--accent) calc(50% + 0.75px), transparent calc(50% + 0.75px)),
+                    linear-gradient(to bottom right, transparent calc(50% - 0.75px), var(--accent) calc(50% - 0.75px), var(--accent) calc(50% + 0.75px), transparent calc(50% + 0.75px));
+        }
+
+        .day.today {
+            background: var(--accent);
+            color: #0f172a;
+            font-weight: 700;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25), 0 0 14px var(--accent);
+        }
+
+        .cal-legend {
+            display: flex;
+            gap: 18px;
+            font-size: 0.72rem;
+            color: #94a3b8;
+            flex-shrink: 0;
+        }
+
+        .cal-legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cal-legend i {
+            display: block;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        .lg-passed {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background-image:
+                    linear-gradient(to top right, transparent calc(50% - 0.75px), var(--accent) calc(50% - 0.75px), var(--accent) calc(50% + 0.75px), transparent calc(50% + 0.75px)),
+                    linear-gradient(to bottom right, transparent calc(50% - 0.75px), var(--accent) calc(50% - 0.75px), var(--accent) calc(50% + 0.75px), transparent calc(50% + 0.75px));
+        }
+
+        .lg-today {
+            background: var(--accent);
+        }
+
+        .lg-future {
+            background: rgba(255, 255, 255, 0.09);
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 18px 14px;
+            }
+
+            .day {
+                font-size: 0;
+            }
+
+            .month-label {
+                flex-basis: 40px;
+                font-size: 0.6rem;
+            }
+
+            .unit .num {
+                font-size: 1.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -193,18 +414,63 @@
 <canvas id="scene"></canvas>
 
 <div class="container">
-    <div id="home-badge" class="badge-home">Служба еще не началась</div>
-    <h1>До дембеля осталось</h1>
+    <div class="tabs">
+        <button class="tab active" id="tab-counter" onclick="setView('counter')">Счётчик</button>
+        <button class="tab" id="tab-calendar" onclick="setView('calendar')">Календарь</button>
+    </div>
 
-    <div id="counter" class="counter"></div>
+    <div class="views">
+        <!-- Вкладка: счётчик -->
+        <div class="view active" id="view-counter">
+            <div id="home-badge" class="badge-home">Служба еще не началась</div>
+            <h1>До дембеля осталось</h1>
 
-    <div class="subtext">Дата дембеля (предположительная): 28.10.2027</div>
+            <div id="counter" class="counter"></div>
+
+            <div class="subtext">Дата дембеля (предположительная): 28.10.2027</div>
+        </div>
+
+        <!-- Вкладка: календарь -->
+        <div class="view" id="view-calendar">
+            <div class="cal-progress">
+                <span>Пройдено дней</span>
+                <span><b id="cal-done">0</b> из 365 · осталось <b id="cal-left">365</b></span>
+            </div>
+            <div class="bar"><div id="cal-bar-fill"></div></div>
+
+            <div class="cal-grid" id="cal-grid"></div>
+
+            <div class="cal-legend">
+                <span><i class="lg-passed"></i>пройден</span>
+                <span><i class="lg-today"></i>сегодня</span>
+                <span><i class="lg-future"></i>впереди</span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // ================== СЧЕТЧИК ==================
+    const params = new URLSearchParams(location.search);
+
+    function getNow() {
+        const forcedDate = params.get('date');
+        if (forcedDate) {
+            const d = new Date(forcedDate + 'T12:00:00');
+            if (!isNaN(d)) return d;
+        }
+        return new Date();
+    }
+
+    function setView(name) {
+        ['counter', 'calendar'].forEach(v => {
+            document.getElementById('view-' + v).classList.toggle('active', v === name);
+            document.getElementById('tab-' + v).classList.toggle('active', v === name);
+        });
+    }
+
     const targetDate = new Date(2027, 9, 28, 0, 0, 0);
     const checkDate = new Date(2026, 9, 28, 0, 0, 0);
+    const TOTAL_DAYS = 365;
 
     function getPlural(number, one, two, five) {
         let n = Math.abs(number);
@@ -223,8 +489,10 @@
     }
 
     function updateCounter() {
-        const now = new Date();
+        const now = getNow();
         document.getElementById('home-badge').classList.toggle('show', now < checkDate);
+
+        updateCalendar(now);
 
         if (now >= targetDate) {
             document.getElementById('counter').innerHTML =
@@ -271,32 +539,85 @@
         ]);
     }
 
-    // ================== СЕЗОНЫ ==================
+    const MONTH_NAMES = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+    const dayCells = [];
+    let lastDayIdx = null;
+
+    function buildCalendar() {
+        const grid = document.getElementById('cal-grid');
+        let currentKey = null;
+        let daysBox = null;
+
+        for (let i = 0; i < TOTAL_DAYS; i++) {
+            const d = new Date(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate() + i);
+            const key = d.getFullYear() + '-' + d.getMonth();
+
+            if (key !== currentKey) {
+                currentKey = key;
+                const row = document.createElement('div');
+                row.className = 'month-row';
+
+                const label = document.createElement('div');
+                label.className = 'month-label';
+                label.textContent = MONTH_NAMES[d.getMonth()] + ' ' + String(d.getFullYear()).slice(2);
+
+                daysBox = document.createElement('div');
+                daysBox.className = 'month-days';
+
+                row.appendChild(label);
+                row.appendChild(daysBox);
+                grid.appendChild(row);
+            }
+
+            const cell = document.createElement('div');
+            cell.className = 'day';
+            cell.textContent = d.getDate();
+            cell.style.gridColumn = d.getDate();
+            cell.title = d.toLocaleDateString('ru-RU', {day: 'numeric', month: 'long', year: 'numeric'});
+            daysBox.appendChild(cell);
+            dayCells.push(cell);
+        }
+    }
+
+    function getDayIndex(now) {
+        const a = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+        const b = Date.UTC(checkDate.getFullYear(), checkDate.getMonth(), checkDate.getDate());
+        return Math.round((a - b) / 86400000);
+    }
+
+    function updateCalendar(now) {
+        const idx = getDayIndex(now);
+        if (idx === lastDayIdx) return;
+        lastDayIdx = idx;
+
+        dayCells.forEach((cell, i) => {
+            cell.classList.toggle('passed', i < idx);
+            cell.classList.toggle('today', i === idx);
+        });
+
+        const done = Math.max(0, Math.min(TOTAL_DAYS, idx));
+        document.getElementById('cal-done').textContent = done;
+        document.getElementById('cal-left').textContent = TOTAL_DAYS - done;
+        document.getElementById('cal-bar-fill').style.width = (done / TOTAL_DAYS * 100) + '%';
+    }
+
+    buildCalendar();
+
     const SEASONS = ['winter', 'spring', 'summer', 'autumn'];
 
     function getSeason(d) {
         const m = d.getMonth();
-
-        if (m === 11 || m <= 1) {
-            return 'winter';
-        }
-        if (m <= 4) {
-            return 'spring';
-        }
-        if (m <= 7) {
-            return 'summer';
-        }
-
+        if (m === 11 || m <= 1) return 'winter';
+        if (m <= 4) return 'spring';
+        if (m <= 7) return 'summer';
         return 'autumn';
     }
 
-    // ?season=winter|spring|summer|autumn — для проверки
-    const forced = new URLSearchParams(location.search).get('season');
-    const season = SEASONS.includes(forced) ? forced : getSeason(new Date());
+    const forced = params.get('season');
+    const season = SEASONS.includes(forced) ? forced : getSeason(getNow());
 
     document.body.classList.add(season);
 
-    // ================== АНИМАЦИЯ ==================
     const canvas = document.getElementById('scene');
     const ctx = canvas.getContext('2d');
     let W = 0, H = 0, particles = [];
@@ -369,7 +690,6 @@
         const cx = W * 0.82, cy = H * 0.17;
         const R = Math.max(36, Math.min(64, Math.min(W, H) * 0.08));
 
-        // свечение
         const glow = ctx.createRadialGradient(cx, cy, R * 0.5, cx, cy, R * 5);
         glow.addColorStop(0, 'rgba(255, 240, 150, 0.55)');
         glow.addColorStop(1, 'rgba(255, 240, 150, 0)');
@@ -378,7 +698,6 @@
         ctx.arc(cx, cy, R * 5, 0, Math.PI * 2);
         ctx.fill();
 
-        // лучи
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(t * 0.00015);
@@ -396,7 +715,6 @@
         }
         ctx.restore();
 
-        // диск
         const disc = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, R * 0.2, cx, cy, R);
         disc.addColorStop(0, '#fffbe0');
         disc.addColorStop(1, '#fcd34d');
@@ -439,7 +757,6 @@
 
     function frame(t) {
         ctx.clearRect(0, 0, W, H);
-
         if (season === 'summer') drawSun(t);
 
         for (let i = 0; i < particles.length; i++) {
