@@ -202,7 +202,7 @@
         .unit {
             flex: 1 1 0;
             min-width: 0;
-            max-width: 130px;
+            max-width: 110px;
             padding: 18px 0 14px;
             border-radius: 18px;
             background: rgba(255, 255, 255, 0.07);
@@ -534,6 +534,7 @@
         render([
             {value: totalMonths, label: getPlural(totalMonths, 'месяц', 'месяца', 'месяцев')},
             {value: days, label: getPlural(days, 'день', 'дня', 'дней')},
+            {value: hours, label: getPlural(hours, 'час', 'часа', 'часов')},
             {value: minutes, label: getPlural(minutes, 'минута', 'минуты', 'минут')},
             {value: seconds, label: getPlural(seconds, 'секунда', 'секунды', 'секунд')}
         ]);
